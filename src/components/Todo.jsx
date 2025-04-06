@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { addTodo, deleteTodo, updatedtodo } from "../store/slice/todoSlice"
+import { addTodo, deleteTodo, fetchTodos, updatedtodo } from "../store/slice/todoSlice"
 
 const Todo = () => {
 
@@ -8,6 +8,7 @@ const Todo = () => {
     const [upateTodo , setUpdateTodo] = useState("")
     const dispatch = useDispatch()
     const todoList = useSelector(state => state.todo.todoList)
+    const todoListFromApi = useSelector(state => state.todo.todoListFromApi)
     function handleSubmit() {
         dispatch(addTodo(currentTodo))
         setCurretTodo("")
@@ -23,6 +24,10 @@ const Todo = () => {
             updateItem : upateTodo
         }
         dispatch(updatedtodo(payload))
+    }
+    function fetchTodsfromApi()
+    {
+        dispatch(fetchTodos())
     }
     return (
         <>
@@ -42,6 +47,13 @@ const Todo = () => {
                         <button onClick={()=> haldleUpdate(item)} > update todo </button>
                     </div>
                 }) : <h1>no todos currently available</h1>
+            }
+            <button onClick={fetchTodsfromApi} >fetch todos from apis</button>
+
+            {
+                todoListFromApi.map((item,idx)=>{
+                    return <li key={idx} >{item.todo}</li>
+                })
             }
         </>
     )
